@@ -7,8 +7,10 @@
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [Contributing](#contributing)
+- [Troubleshooting](#troubleshooting)
 - [License](#license)
 - [Contact Information](#contact-information)
+- [Changelog](#changelog)
 
 ---
 
