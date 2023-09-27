@@ -23,7 +23,7 @@ The DigiDargah Crypto Payment Gateway for WHMCS is a plugin that allows WHMCS us
 - **Author:** DigiDargah.com
 - **Author URI:** [https://digidargah.com](https://digidargah.com)
 - **Author Email:** info@digidargah.com
-- **Text Domain:** DigiDargah_WHMCS_payment_module
+- **Text Domain:** DigiDargah_whmcs_payment_module
 - **WC tested up to:** 8.8
 - **Copyright (C):** 2020 DigiDargah
 - **License:** [GPLv3 or later](http://www.gnu.org/licenses/gpl-3.0.html)
