@@ -32,7 +32,7 @@ The DigiDargah Crypto Payment Gateway for WHMCS is a plugin that allows WHMCS us
 
 ## Installation
 
-After submitting your website on DigiDargah.com and getting an API key, to install the DigiDargah Crypto Payment Gateway for WooCommerce, follow these steps:
+After submitting your website on DigiDargah.com and getting an API key, to install the DigiDargah Crypto Payment Gateway for WHMCS, follow these steps:
 
 1. Copy the `digidargah.php` file to the `modules/gateways/` directory of your WHMCS installation.
 
