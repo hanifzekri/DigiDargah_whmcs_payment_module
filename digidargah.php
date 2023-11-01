@@ -129,7 +129,7 @@ if ($invoice_id > 0) {
 
 function digidargah_MetaData(){
     return array(
-        'DisplayName' => 'ماژول پرداخت دیجی درگاه',
+        'DisplayName' => 'درگاه پرداخت رمز ارزی دیجی درگاه',
         'APIVersion' => '1.1',
     );
 }
