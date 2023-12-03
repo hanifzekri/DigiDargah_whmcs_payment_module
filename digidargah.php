@@ -47,25 +47,31 @@ if ($invoice_id > 0) {
         /* Remove Added Slash In Version 7 Or Above */
         $systemurl = rtrim($gatewayParams['systemurl'], '/') . '/';
 
-        $params = array('api_key' => $api_key,
-						'amount_value' => $amount,
-						'amount_currency' => strtolower($currency),
-						'pay_currency' => $pay_currency,
-            			'order_id' => $invoice_id,
-            			'respond_type' => 'link',
-            			'callback' => $systemurl . 'modules/gateways/digidargah.php?action=confirm&invoiceid=' . $invoice_id);
-						
-		$options = array( 'http' => array('method' => 'POST', 'header' => 'Content-Type: application/x-www-form-urlencoded', 'timeout' => 10, 'content' => http_build_query($params)), 'ssl' => array('verify_peer' => false, 'verify_peer_name' => false));
+        $params = array(
+			'api_key' => $api_key,
+			'amount_value' => $amount,
+			'amount_currency' => strtolower($currency),
+			'pay_currency' => $pay_currency,
+            'order_id' => $invoice_id,
+            'respond_type' => 'link',
+            'callback' => $systemurl . 'modules/gateways/digidargah.php?action=confirm&invoiceid=' . $invoice_id
+		);
 		
 		$url = 'https://digidargah.com/action/ws/request_create';
-		$response = file_get_contents($url, false, stream_context_create($options));
-		$response = json_decode($response);
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		curl_close($ch);
+				
+		$result = json_decode($response);
 		
-		if ($response->status != 'success')
-			echo '<p> درگاه پرداخت با خطا مواجه شد. <br> پاسخ درگاه : ' . $response->respond .'</p>';
+		if ($result->status != 'success')
+			echo '<p> درگاه پرداخت با خطا مواجه شد. <br> پاسخ درگاه : ' . $result->respond .'</p>';
 		else {
-			$is_Updated = Capsule::table('tblinvoices')->where('id', $invoice_id)->update(['notes' => $response->request_id]);
-            if ($is_Updated == 1) header('Location: ' . $response->respond);
+			$is_Updated = Capsule::table('tblinvoices')->where('id', $invoice_id)->update(['notes' => $result->request_id]);
+            if ($is_Updated == 1) header('Location: ' . $result->respond);
             if ($is_Updated == 0) die('پایگاه داده با خطا مواجه شد. لطفا مجددا تلاش نمایید و در صورت عدم رفع مشکل، با پشتیبانی مکاتبه نمایید.');
         }
     }
@@ -80,30 +86,36 @@ if ($invoice_id > 0) {
         $checkGateway = checkCbInvoiceID($invoice_id, $gatewayParams['name']);
         if (!$checkGateway) die("برای پرداخت این فاکتور، درگاه دیگری انتخاب شده است.");
 		
-		$params = array('api_key' => $api_key,
-						'order_id' => $invoice_id,
-						'request_id' => $invoice->notes);
-		
-		$options = array( 'http' => array('method' => 'POST', 'header' => 'Content-Type: application/x-www-form-urlencoded', 'timeout' => 10, 'content' => http_build_query($params)), 'ssl' => array('verify_peer' => false, 'verify_peer_name' => false));
-		
+		$params = array(
+			'api_key' => $api_key,
+			'order_id' => $invoice_id,
+			'request_id' => $invoice->notes
+		);
+				
 		$url = 'https://digidargah.com/action/ws/request_status';
-		$result = file_get_contents($url, false, stream_context_create($options));
-		$response = json_decode($result);
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($ch);
+		curl_close($ch);
 		
-		if ($response->status != 'success') {
+		$result = json_decode($response);
+		
+		if ($result->status != 'success') {
 			
-			logTransaction($gatewayParams['name'], ["GET" => $_GET, "POST" => $_POST, "result" => $result], 'Failure');
+			logTransaction($gatewayParams['name'], ["GET" => $_GET, "POST" => $_POST, "result" => $response], 'Failure');
 			
 			$message = digidargah_get_filled_message($gatewayParams['failed_massage'], $invoice->notes, $invoice_id);
-            Capsule::table('tblinvoices')->where('id', $invoice_id)->update(['notes' => $message . '<br> پاسخ درگاه : ' . $response->respond]);
+            Capsule::table('tblinvoices')->where('id', $invoice_id)->update(['notes' => $message . '<br> پاسخ درگاه : ' . $result->respond]);
 			
             header('Location: ' . $gatewayParams['systemurl'] . '/viewinvoice.php?id=' . $invoice_id);
 		
 		} else {
 		
-			$verify_status = empty($response->status) ? NULL : $response->status;
-			$verify_request_id = empty($response->request_id) ? NULL : $response->request_id;
-			$verify_amount = empty($response->amount_value) ? NULL : $response->amount_value;
+			$verify_status = empty($result->status) ? NULL : $result->status;
+			$verify_request_id = empty($result->request_id) ? NULL : $result->request_id;
+			$verify_amount = empty($result->amount_value) ? NULL : $result->amount_value;
 			
 			$amount = $invoice->total;
 			
@@ -111,14 +123,14 @@ if ($invoice_id > 0) {
 				$message = digidargah_get_filled_message($gatewayParams['failed_massage'], $verify_request_id, $invoice_id);
 				$message .= '<br> متاسفانه در روند تایید تراکنش خطایی رخ داده است. لطفا مجددا تلاش نمایید و یا در صورت نیاز با پشتیبانی مکاتبه نمایید.';
 				
-				logTransaction($gatewayParams['name'], ["GET" => $_GET, "POST" => $_POST, "result" => $result], 'Failure');
+				logTransaction($gatewayParams['name'], ["GET" => $_GET, "POST" => $_POST, "result" => $response], 'Failure');
 				Capsule::table('tblinvoices')->where('id', $invoice_id)->update(['notes' => $message]);
 				header('Location: ' . $gatewayParams['systemurl'] . '/viewinvoice.php?id=' . $invoice_id);
 			
 			} else {
 				addInvoicePayment($invoice_id, $verify_request_id, $amount, 0, $gatewayParams['paymentmethod']);
 				$message = digidargah_get_filled_message($gatewayParams['success_massage'], $verify_request_id, $invoice_id);
-				logTransaction($gatewayParams['name'], ["GET" => $_GET, "POST" => $_POST, "result" => $result], 'Success');
+				logTransaction($gatewayParams['name'], ["GET" => $_GET, "POST" => $_POST, "result" => $response], 'Success');
 				Capsule::table('tblinvoices')->where('id', $invoice_id)->update(['notes' => $message]);
 				header('Location: ' . $gatewayParams['systemurl'] . '/viewinvoice.php?id=' . $invoice_id);
 			}
