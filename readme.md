@@ -16,7 +16,7 @@
 
 ## Description
 
-The DigiDargah Crypto Payment Gateway for WHMCS is a plugin that allows WHMCS users to accept cryptocurrency payments via the DigiDargah platform. This plugin is developed by Hanif Zekri Astaneh and is provided by DigiDargah.com.
+The DigiDargah Crypto Payment Gateway for WHMCS is a plugin that allows WHMCS users to accept cryptocurrency payments via the DigiDargah platform.
 
 - **Plugin Name:** DigiDargah Crypto Payment Gateway for WHMCS
 - **Version:** 1.1
@@ -24,7 +24,6 @@ The DigiDargah Crypto Payment Gateway for WHMCS is a plugin that allows WHMCS us
 - **Author URI:** [https://digidargah.com](https://digidargah.com)
 - **Author Email:** info@digidargah.com
 - **Text Domain:** DigiDargah_whmcs_payment_module
-- **WC tested up to:** 8.8
 - **Copyright (C):** 2020 DigiDargah
 - **License:** [GPLv3 or later](http://www.gnu.org/licenses/gpl-3.0.html)
 
@@ -40,11 +39,11 @@ After submitting your website on DigiDargah.com and getting an API key, to insta
 
 3. Go to the "Setup" menu and select "Payment Gateways."
 
-4. Under the "All Payment Gateways" tab, you should see "DigiDargah" in the list of gateways. Click on it to configure the settings.
+4. Under the "All Payment Gateways" tab, you can see "DigiDargah" in the list of gateways. Click on it to configure the settings.
 
 5. Configure the gateway settings as described in the [Configuration](#configuration) section below.
 
-6. Once configured, save your settings.
+6. Save your settings.
 
 ---
 
@@ -62,11 +61,11 @@ To configure the DigiDargah Crypto Payment Gateway for WHMCS, follow these steps
 
    - **API Key:** Enter your DigiDargah API key. You can obtain this key by visiting [https://digidargah.com/cryptosite](https://digidargah.com/cryptosite).
 
-   - **Pay Currency:** Specify the currencies available for payment. You can list multiple currencies separated by a dash (e.g., bitcoin-dogecoin-ethereum).
+   - **Acceptable cryptocurrencies:** Specify the currencies available for payment. You can list multiple currencies separated by a dash (e.g., bitcoin-dogecoin-ethereum). If you leave this field empty, the customers will be able to pay through all the active currencies in the DigiDargah.
 
-   - **Success Message:** Customize the message to display to customers after a successful payment. You can use placeholders like `{invoice_id}` and `{request_id}` to display the invoice and request IDs.
+   - **Success Message:** Customize the message to display to customers after a successful payment. You can use placeholders `{invoice_id}` and `{request_id}` to display the invoice ID and request IDs.
 
-   - **Failed Message:** Customize the message to display to customers after a failed payment. You can use placeholders like `{invoice_id}` and `{request_id}` to display the invoice and request IDs.
+   - **Failed Message:** Customize the message to display to customers after a failed payment. You can use placeholders `{invoice_id}` and `{request_id}` to display the invoice ID and request IDs.
 
 5. Save your settings.
 
@@ -120,7 +119,7 @@ First release.
 
 ---
 
-Thank you for using the DigiDargah Crypto Payment Gateway for WooCommerce! We appreciate your business.
+Thank you for using the DigiDargah Crypto Payment Gateway for WHMCS! We appreciate your business.
 
 ---
 
