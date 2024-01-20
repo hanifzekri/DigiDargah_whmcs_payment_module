@@ -55,13 +55,13 @@ To configure the DigiDargah Crypto Payment Gateway for WHMCS, follow these steps
 
 2. Go to the "Setup" menu and select "Payment Gateways."
 
-3. Under the "All Payment Gateways" tab, select "DigiDargah" from the list of gateways.
+3. Under the "All Payment Gateways" tab, select "DigiDargah" from the list.
 
 4. Configure the following settings:
 
    - **API Key:** Enter your DigiDargah API key. You can obtain this key by visiting [https://digidargah.com/cryptosite](https://digidargah.com/cryptosite).
 
-   - **Acceptable cryptocurrencies:** Specify the currencies available for payment. You can list multiple currencies separated by a dash (e.g., bitcoin-dogecoin-ethereum). If you leave this field empty, the customers will be able to pay through all the active currencies in the DigiDargah.
+   - **Acceptable cryptocurrencies:** Specify the crypto currencies available for payment. You can list multiple currencies separated by a dash (e.g., bitcoin-dogecoin-ethereum). If you leave this field empty, the customers will be able to pay through all the active crypto currencies in the DigiDargah.
 
    - **Success Message:** Customize the message to display to customers after a successful payment. You can use placeholders `{invoice_id}` and `{request_id}` to display the invoice ID and request IDs.
 
