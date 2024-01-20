@@ -9,7 +9,7 @@
 * Author URI: https://digidargah.com
 * Author Email: info@digidargah.com
 * Text Domain: DigiDargah_WHMCS_payment_module
-* WC tested up to: 8.8
+* Tested version up to: 8.8
 * copyright (C) 2020 DigiDargah
 * license http://www.gnu.org/licenses/gpl-3.0.html GPLv3 or later
 */
@@ -42,10 +42,10 @@ if ($invoice_id > 0) {
 			die("متاسفانه این فاکتور وجود ندارد و یا متعلق به شما نیست. در صورتی که تصور می کنید مشکلی بوجود آمده است با پشتیبانی مکاتبه نمایید.");
 
         $user = Capsule::table('tblclients')->where('id', $user_id)->first();
+		$desc = $user->firstname . ' ' . $user->lastname . ' ' . $user->phonenumber;
         
         $amount = $invoice->total;
-        /* Remove Added Slash In Version 7 Or Above */
-        $systemurl = rtrim($gatewayParams['systemurl'], '/') . '/';
+        $systemurl = rtrim($gatewayParams['systemurl'], '/');
 
         $params = array(
 			'api_key' => $api_key,
@@ -53,6 +53,7 @@ if ($invoice_id > 0) {
 			'amount_currency' => strtolower($currency),
 			'pay_currency' => $pay_currency,
             'order_id' => $invoice_id,
+			'desc' => $desc,
             'respond_type' => 'link',
             'callback' => $systemurl . 'modules/gateways/digidargah.php?action=confirm&invoiceid=' . $invoice_id
 		);
@@ -141,7 +142,7 @@ if ($invoice_id > 0) {
 
 function digidargah_MetaData(){
     return array(
-        'DisplayName' => 'درگاه پرداخت رمز ارزی دیجی درگاه',
+        'DisplayName' => 'پرداخت رمز ارزی دیجی درگاه',
         'APIVersion' => '1.1',
     );
 }
@@ -156,25 +157,25 @@ function digidargah_config(){
             "FriendlyName" => 'کلید API',
             "Type" => 'text',
 			"Value" => '',
-			"Description" => 'برای ایجاد کلید API لطفا به آدرس رو به رو مراجعه نمایید. <a href="https://digidargah.com/cryptosite" target="_blank">https://digidargah.com/cryptosite</a>'
+			"Description" => 'برای ایجاد و دریافت کلید API لطفا به <a href="https://digidargah.com/cryptosite" target="_blank"> مجموعه دیجی درگاه </a> مراجعه نمایید.'
         ],
         "pay_currency" => [
             "FriendlyName" => 'ارزهای قابل انتخاب',
             "Type" => 'text',
 			"Value" => '',
-			"Description" => 'به صورت پیش فرض کاربر امکان پرداخت از طریق تمامی <a href="https://digidargah.com/cryptosite" target="_blank"> ارزهای فعال </a> در درگاه را دارد اما در صورتی که تمایل دارید مشتری را محدود به پرداخت از طریق یک یا چند ارز خاص کنید، می توانید از طریق این متغییر نام ارز و یا ارزها را اعلام نمایید. در صورت تمایل به اعلام بیش از یک ارز، آنها را توسط خط تیره ( dash ) از هم جدا کنید.'
+			"Description" => 'در صورتی که تمایل دارید مشتریان را محدود به پرداخت از طریق یک یا چند رمز ارز خاص کنید، می توانید از طریق این فیلد، نام رمزارزها را وارد نمایید. در صورت تمایل به ورود بیش از یک رمزارز، لطفا آنها را توسط خط تیره ( dash ) از هم جدا کنید. ( مثال : bitcoin-dogecoin-ethereum ) با خالی گذاشتن این فیلد، مشتریان امکان پرداخت از طریق تمامی رمزارزهای فعال در مجموعه دیجی درگاه را خواهند داشت.'
         ],
         "success_massage" => [
             "FriendlyName" => 'پیام پرداخت موفق',
             "Type" => 'textarea',
             "Value" => 'پرداخت شما با موفقیت انجام شد. <br><br> شماره فاکتور : {invoice_id} <br> کد رهگیری درگاه پرداخت : {request_id}',
-            "Description" => 'از طریق این فیلد می توانید متن پیامی را که می خواهید بعد از پرداخت موفق به کاربر نمایش داده شود تنظیم نمایید. همچنین می توانید از عبارت های کلیدی {invoice_id} برای نمایش شماره فاکتور و {request_id} برای نمایش کد رهگیری دیجی درگاه استفاده نمایید.'
+            "Description" => 'از طریق این فیلد می توانید متن پیامی را که می خواهید بعد از پرداخت موفق به مشتری نمایش داده شود تنظیم نمایید. همچنین می توانید از عبارت های کلیدی {invoice_id} برای نمایش شماره فاکتور و {request_id} برای نمایش کد رهگیری دیجی درگاه استفاده نمایید.'
         ],
         "failed_massage" => [
             "FriendlyName" => 'پیام پرداخت ناموفق',
             "Type" => 'textarea',
-            "Value" => 'پرداخت شما با موفقیت انجام نشد. <br><br> شماره فاکتور : {invoice_id} <br> کد رهگیری درگاه پرداخت : {request_id}',
-            "Description" => 'از طریق این فیلد می توانید متن پیامی را که می خواهید بعد از پرداخت ناموفق به کاربر نمایش داده شود تنظیم نمایید. همچنین می توانید از عبارت های کلیدی {invoice_id} برای نمایش شماره فاکتور و {request_id} برای نمایش کد رهگیری دیجی درگاه استفاده نمایید.'
+            "Value" => 'متاسفانه پرداخت شما با موفقیت انجام نشد. <br><br> شماره فاکتور : {invoice_id} <br> کد رهگیری درگاه پرداخت : {request_id}',
+            "Description" => 'از طریق این فیلد می توانید متن پیامی را که می خواهید بعد از پرداخت ناموفق به مشتری نمایش داده شود تنظیم نمایید. همچنین می توانید از عبارت های کلیدی {invoice_id} برای نمایش شماره فاکتور و {request_id} برای نمایش کد رهگیری دیجی درگاه استفاده نمایید.'
         ]
     ];
 }
