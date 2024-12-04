@@ -58,7 +58,7 @@ if ($invoice_id > 0) {
             'callback' => $systemurl . 'modules/gateways/digidargah.php?action=confirm&invoiceid=' . $invoice_id
 		);
 		
-		$url = 'https://digidargah.com/action/ws/request_create';
+		$url = 'https://digidargah.com/action/ws/request/create';
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
@@ -93,7 +93,7 @@ if ($invoice_id > 0) {
 			'request_id' => $invoice->notes
 		);
 				
-		$url = 'https://digidargah.com/action/ws/request_status';
+		$url = 'https://digidargah.com/action/ws/request/status';
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
