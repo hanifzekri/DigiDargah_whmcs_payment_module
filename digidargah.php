@@ -157,7 +157,7 @@ function digidargah_config(){
             "FriendlyName" => 'کلید API',
             "Type" => 'text',
 			"Value" => '',
-			"Description" => 'برای ایجاد و دریافت کلید API لطفا به <a href="https://digidargah.com/cryptosite" target="_blank"> مجموعه دیجی درگاه </a> مراجعه نمایید.'
+			"Description" => 'برای ایجاد و دریافت کلید API لطفا به <a href="https://digidargah.com/gateway" target="_blank"> مجموعه دیجی درگاه </a> مراجعه نمایید.'
         ],
         "pay_currency" => [
             "FriendlyName" => 'ارزهای قابل انتخاب',
